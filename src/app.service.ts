@@ -53,5 +53,15 @@ export class TweetService {
     const recentTweets = twitter.filter((rec, i) => i >= diff)
     return recentTweets
 }
+return twitter;
   };
+  getTweetsByUsername(username: string) {
+  const userTweets = this.tweets?.filter(twt => twt.username === username)?.map(tweet => {
+    const twitterUser = this.appService.getUsernames()?.find((user) => user._username === tweet.username)
+    const picture = twitterUser._avatar;
+
+    return {...tweet, avatar: picture}
+  })
+  return userTweets;
+  }
 };

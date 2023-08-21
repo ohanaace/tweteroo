@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { AppService, HealthService, TweetService } from './app.service';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 import { CreateTweetDTO } from './dtos/CreateTweetDTO';
@@ -24,17 +24,21 @@ export class AppController {
   }
 }
 
-@Controller()
+@Controller("tweets")
 export class TweetController {
   constructor(private readonly appService: TweetService) { }
 
-  @Post("tweets")
+  @Post()
   createTweet(@Body() body: CreateTweetDTO) {
     return this.appService.createTweet(body);
-  }
+  };
 
-  @Get("tweets")
+  @Get()
   getLatestTweets() {
     return this.appService.getLatestTweets();
+  };
+  @Get(':username')
+  getTweetsByUsername(@Param('username') username: string){
+    return this.appService.getTweetsByUsername(username);
   }
 }

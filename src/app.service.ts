@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import User from './entities/users-entities';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 import Tweet from './entities/tweets-entities';
@@ -41,13 +41,24 @@ export class TweetService {
     return newTweet;
   };
 
-  getLatestTweets() {
+  getLatestTweets(page: string) {
+    if(page && isNaN(parseInt(page)) || parseInt(page) <= 1) {
+      throw new BadRequestException("Informe uma página válida!")
+    }
     const twitter = this.tweets.map((twt) => {
       const twitterUser = this.appService.getUsernames()?.find((user) => user._username === twt.username)
       const picture = twitterUser._avatar;
   
       return {...twt, avatar: picture}
   });
+
+  if(page){
+    const limit: number = 15;
+    const start: number = (Number(page) - 1) * limit;
+    const end: number = (Number(page)) * limit;
+    
+    return twitter.slice(start, end);
+  }
   if(twitter.length > 15){
     const diff = twitter.length - 15
     const recentTweets = twitter.filter((rec, i) => i >= diff)

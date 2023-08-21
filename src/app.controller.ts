@@ -1,7 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { AppService, HealthService, TweetService } from './app.service';
 import { CreateUserDTO } from './dtos/CreateUserDTO';
 import { CreateTweetDTO } from './dtos/CreateTweetDTO';
+import { IsInt } from 'class-validator';
 
 @Controller()
 export class HealthController {
@@ -34,8 +35,8 @@ export class TweetController {
   };
 
   @Get()
-  getLatestTweets() {
-    return this.appService.getLatestTweets();
+  getLatestTweets(@Query('page') page: string) {
+    return this.appService.getLatestTweets(page);
   };
   @Get(':username')
   getTweetsByUsername(@Param('username') username: string){

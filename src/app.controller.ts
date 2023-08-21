@@ -32,4 +32,9 @@ export class TweetController {
   createTweet(@Body() body: CreateTweetDTO) {
     return this.appService.createTweet(body);
   }
+
+  @Get("tweets")
+  getLatestTweets() {
+    return this.appService.getLatestTweets();
+  }
 }

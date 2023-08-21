@@ -30,14 +30,28 @@ export class AppService {
 export class TweetService {
   private tweets: Tweet[] = [];
   constructor(private readonly appService: AppService) {}
+  
   createTweet(tweetDTO: CreateTweetDTO) {
   const authorizedUser = this.appService.getUsernames()?.find(user => user._username === tweetDTO.username)
-    console.log(authorizedUser);
    if(!authorizedUser) {
     throw new UnauthorizedException();
-   }
+   };
    const newTweet = new Tweet(tweetDTO.username, tweetDTO.tweet)
    this.tweets.push(newTweet);
     return newTweet;
-  }
+  };
+
+  getLatestTweets() {
+    const twitter = this.tweets.map((twt) => {
+      const twitterUser = this.appService.getUsernames()?.find((user) => user._username === twt.username)
+      const picture = twitterUser._avatar;
+  
+      return {...twt, avatar: picture}
+  });
+  if(twitter.length > 15){
+    const diff = twitter.length - 15
+    const recentTweets = twitter.filter((rec, i) => i >= diff)
+    return recentTweets
 }
+  };
+};

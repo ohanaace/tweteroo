@@ -1,9 +1,9 @@
 export default class User {
-    username: string;
-    avatar: string;
+  _username: string;
+  _avatar: string;
 
     constructor(username: string, avatar: string){
-        this.username = username;
-        this.avatar = avatar;
+        this._username = username;
+        this._avatar = avatar;
     };
 };
